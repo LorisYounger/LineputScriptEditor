@@ -1,0 +1,309 @@
+﻿<Window x:Class="LineputScriptEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LineputScriptEditor"
+        xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+        mc:Ignorable="d"
+        Title="LinePutScript 编辑器"
+        Height="500"
+        Width="700">
+    <Window.Resources>
+        <ControlTemplate x:Key="MenuItemControlNT"
+                         TargetType="{x:Type MenuItem}">
+            <Border x:Name="templateRoot"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Background="{TemplateBinding Background}"
+                    SnapsToDevicePixels="True">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter x:Name="Icon"
+                                      Content="{TemplateBinding Icon}"
+                                      ContentSource="Icon"
+                                      HorizontalAlignment="Center"
+                                      Height="16"
+                                      Margin="3"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      VerticalAlignment="Center"
+                                      Width="16" />
+                    <Path x:Name="GlyphPanel"
+                          Data="F1M10,1.2L4.7,9.1 4.5,9.1 0,5.2 1.3,3.5 4.3,6.1 8.3,0 10,1.2z"
+                          Fill="#FF212121"
+                          FlowDirection="LeftToRight"
+                          Margin="3"
+                          Visibility="Collapsed"
+                          VerticalAlignment="Center" />
+                    <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                      Content="{TemplateBinding Header}"
+                                      Grid.Column="1"
+                                      ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                      ContentSource="Header"
+                                      Margin="{TemplateBinding Padding}"
+                                      RecognizesAccessKey="True"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Icon"
+                         Value="{x:Null}">
+                    <Setter Property="Visibility"
+                            TargetName="Icon"
+                            Value="Collapsed" />
+                </Trigger>
+                <Trigger Property="IsChecked"
+                         Value="True">
+                    <Setter Property="Visibility"
+                            TargetName="GlyphPanel"
+                            Value="Visible" />
+                    <Setter Property="Visibility"
+                            TargetName="Icon"
+                            Value="Collapsed" />
+                </Trigger>
+                <Trigger Property="IsHighlighted"
+                         Value="True">
+                    <Setter Property="BorderBrush"
+                            TargetName="templateRoot"
+                            Value="#FF26A0DA" />
+                </Trigger>
+                <Trigger Property="IsEnabled"
+                         Value="False">
+                    <Setter Property="TextElement.Foreground"
+                            TargetName="templateRoot"
+                            Value="#FF707070" />
+                    <Setter Property="Fill"
+                            TargetName="GlyphPanel"
+                            Value="#FF707070" />
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsHighlighted"
+                                   Value="True" />
+                        <Condition Property="IsEnabled"
+                                   Value="False" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background"
+                            TargetName="templateRoot"
+                            Value="#0A000000" />
+                    <Setter Property="BorderBrush"
+                            TargetName="templateRoot"
+                            Value="#21000000" />
+                </MultiTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid Background="#FFCCD5F0">
+        <Menu VerticalAlignment="Top"
+              FontSize="14">
+            <MenuItem Margin="5,3,1,3"
+                      Width="20"
+                      Template="{DynamicResource MenuItemControlNT}"
+                      Click="LPTHead_Click">
+                <MenuItem.Background>
+                    <ImageBrush ImageSource="function-fill.png" />
+                </MenuItem.Background>
+            </MenuItem>
+            <MenuItem Header="文件"
+                      Margin="3">
+                <MenuItem Header="新建LPS文件" />
+                <MenuItem Header="新建LPT文件" />
+                <Separator />
+                <MenuItem Header="打开文件"
+                          Click="MenuOpenFile_Click" />
+                <MenuItem Header="打开文件夹" />
+                <Separator />
+                <MenuItem Header="打开最近的文件" />
+                <Separator />
+                <MenuItem Header="保存" />
+                <MenuItem Header="另存为" />
+                <MenuItem Header="全部保存" />
+                <Separator />
+                <MenuItem Header="还原文件" />
+                <MenuItem Header="关闭窗口" />
+                <Separator />
+                <MenuItem Header="退出" />
+            </MenuItem>
+            <MenuItem Header="编辑"
+                      Margin="3" />
+            <MenuItem Header="查看"
+                      Margin="3" />
+            <MenuItem Header="格式"
+                      Margin="3" />
+            <MenuItem Header="指令"
+                      Margin="3" />
+            <MenuItem x:Name="HeaderText"
+                      Header="欢迎使用"
+                      Margin="40,3,1,3"
+                      Template="{DynamicResource MenuItemControlNT}"
+                      FontStyle="Italic"
+                      Background="#FFD9E0F8"
+                      Foreground="#FF40568D"
+                      FontWeight="Bold" />
+        </Menu>
+        <TabControl x:Name="TabControlMain"
+                    pu:TabControlHelper.ItemsRemoveButtonVisibility="Visible"
+                    pu:TabControlHelper.ItemsSelectedBorderBrush="#3B4F81"
+                    pu:TabControlHelper.ItemsSelectedBorderThickness="2"
+                    pu:TabControlHelper.ItemsSelectedBackground="White"
+                    pu:TabControlHelper.ItemsSelectedCornerRadius="2"
+                    pu:TabControlHelper.HeaderPanelBackground="#5D6B99"
+                    pu:TabControlHelper.ItemsRibbonLinePlacement="Bottom"
+                    pu:TabControlHelper.ItemsRibbonLineVisibility="Visible"
+                    pu:TabControlHelper.ItemsSelectedRibbonLineBrush="White"
+                    pu:TabControlHelper.ItemsSelectedRibbonLineThickness="3"
+                    pu:TabControlHelper.ItemRemoving="TabControlMain_ItemRemoving"
+                    Margin="0,26,0,0"
+                    SelectionChanged="TabControlMain_SelectionChanged"
+                    FontSize="14">
+            <pu:TabControlHelper.RemoveButtonStyle>
+                <Style BasedOn="{StaticResource {x:Type Button}}"
+                       TargetType="{x:Type Button}">
+                    <Setter Property="Content"
+                            Value="x" />
+                    <Setter Property="Margin"
+                            Value="8,0,4,2" />
+                    <Setter Property="FontSize"
+                            Value="16" />
+                    <Setter Property="FontWeight"
+                            Value="Normal" />
+                    <Setter Property="FontStyle"
+                            Value="Normal" />
+                    <Setter Property="Background"
+                            Value="Transparent" />
+                </Style>
+            </pu:TabControlHelper.RemoveButtonStyle>
+            <!--pu:TabItemHelper.Icon="pack://application:,,,/function-fill.png" pu:IconHelper.Margin="-10,2,5,0"-->
+            <TabItem x:Name="TabItemMain"
+                     Header="欢迎使用"
+                     pu:TabItemHelper.Icon="L"
+                     pu:IconHelper.Height="20"
+                     pu:IconHelper.Margin="8,0,2,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto"
+                              x:Name="ViewBoxMain"
+                              Width="Auto">
+                    <Viewbox Width="{Binding ActualWidth,ElementName=ViewBoxMain}"
+                             MinWidth="640"
+                             MaxWidth="960">
+                        <Grid Width="640"
+                              Height="365"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+                            <Label Content="启动"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Margin="20,15,0,0"
+                                   FontSize="18"
+                                   Background="{x:Null}" />
+                            <TextBlock TextWrapping="Wrap"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Margin="25,45,0,0">
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">新建文件</Run>
+                        <LineBreak></LineBreak>
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave"
+                                MouseDown="RunOpenFile_Click">打开文件</Run><Run>&#160;或&#160;</Run>
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">打开文件夹</Run>
+                            </TextBlock>
+                            <Label Content="最近"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Margin="20,90,0,0"
+                                   FontSize="18"
+                                   Background="{x:Null}" />
+                            <TextBlock TextWrapping="Wrap"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Margin="25,120,0,0">                     
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">info.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">string.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">l2d.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\l2d\</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">l3d.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\l3d\</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">aa.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run>
+                            </TextBlock>
+                            <Label Content="帮助"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Margin="20,220,0,0"
+                                   FontSize="18"
+                                   Background="{x:Null}" />
+                            <TextBlock TextWrapping="Wrap"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       Margin="25,250,0,0">
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">快速入门</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">指令速查表</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">关于LPS编辑器</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">关于LineputScript</Run><LineBreak />
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">项目地址(GitHub)</Run>
+                            </TextBlock>
+                            <GroupBox Header="设置"
+                                      Height="320"
+                                      Width="280"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      Margin="340,20,0,0" />
+
+                        </Grid>
+                    </Viewbox>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

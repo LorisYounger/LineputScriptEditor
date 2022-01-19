@@ -32,7 +32,7 @@ namespace LineputScriptEditor
                 setting = new Setting();
         }
         public static Setting setting;
-        public List<Editor> Editors = new List<Editor>();
+        public List<LPSEditor> Editors = new List<LPSEditor>();
         
         private void LPTHead_Click(object sender, RoutedEventArgs e)
         {
@@ -65,13 +65,12 @@ namespace LineputScriptEditor
         public void OpenFile(string Path)
         {
             //如果是已经打开过的文件,跳转到那个文件
-            Editor ed = Editors.Find(x => x.FilePath.ToLower() == Path.ToLower());
+            LPSEditor ed = Editors.Find(x => x.FilePath.ToLower() == Path.ToLower());
             if (ed == null)
             {
                 LpsDocument lps = new LpsDocument(File.ReadAllText(Path));
-                ed = new Editor(Path, lps);
+                ed = new LPSEditor(Path, lps);
                 Editors.Add(ed);
-
                 int idx = TabControlMain.Items.Add(new TabItem()
                 {
                     Header = Path.Split('\\').Last(),

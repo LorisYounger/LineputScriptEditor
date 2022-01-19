@@ -78,6 +78,11 @@
     <Compile Include="EditorSub.xaml.cs">
       <DependentUpon>EditorSub.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditorTable.xaml.cs">
+      <DependentUpon>EditorTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Function.cs" />
+    <Compile Include="Interface.cs" />
     <Compile Include="Setting.cs" />
     <Compile Include="ToolBox.xaml.cs">
       <DependentUpon>ToolBox.xaml</DependentUpon>
@@ -87,6 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="EditorSub.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -109,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ToolBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

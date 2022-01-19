@@ -96,7 +96,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-    <Grid Background="#FFCCD5F0">
+    <Grid Background="{DynamicResource MemuBackground}">
         <Menu VerticalAlignment="Top"
               FontSize="14">
             <MenuItem Margin="5,3,1,3"
@@ -140,25 +140,27 @@
                       Margin="40,3,1,3"
                       Template="{DynamicResource MenuItemControlNT}"
                       FontStyle="Italic"
-                      Background="#FFD9E0F8"
+                      Background="{DynamicResource MemuHeadBackground}"
                       Foreground="#FF40568D"
                       FontWeight="Bold" />
         </Menu>
         <TabControl x:Name="TabControlMain"
                     pu:TabControlHelper.ItemsRemoveButtonVisibility="Visible"
-                    pu:TabControlHelper.ItemsSelectedBorderBrush="#3B4F81"
+                    pu:TabControlHelper.ItemsSelectedBorderBrush="{DynamicResource ItemsSelectedBorderBrush}"
                     pu:TabControlHelper.ItemsSelectedBorderThickness="2"
-                    pu:TabControlHelper.ItemsSelectedBackground="White"
+                    pu:TabControlHelper.ItemsSelectedBackground="{DynamicResource PageBackground}"
                     pu:TabControlHelper.ItemsSelectedCornerRadius="2"
-                    pu:TabControlHelper.HeaderPanelBackground="#5D6B99"
+                    pu:TabControlHelper.HeaderPanelBackground="{DynamicResource TABBackground}"
+                    pu:TabControlHelper.ItemsSelectedForeground="{DynamicResource ItemsSelectedForeground}"
                     pu:TabControlHelper.ItemsRibbonLinePlacement="Bottom"
                     pu:TabControlHelper.ItemsRibbonLineVisibility="Visible"
-                    pu:TabControlHelper.ItemsSelectedRibbonLineBrush="White"
+                    pu:TabControlHelper.ItemsSelectedRibbonLineBrush="{DynamicResource PageBackground}"
                     pu:TabControlHelper.ItemsSelectedRibbonLineThickness="3"
                     pu:TabControlHelper.ItemRemoving="TabControlMain_ItemRemoving"
                     Margin="0,26,0,0"
                     SelectionChanged="TabControlMain_SelectionChanged"
-                    FontSize="14">
+                    FontSize="14"
+                    Background="{DynamicResource PageBackground}">
             <pu:TabControlHelper.RemoveButtonStyle>
                 <Style BasedOn="{StaticResource {x:Type Button}}"
                        TargetType="{x:Type Button}">
@@ -174,6 +176,8 @@
                             Value="Normal" />
                     <Setter Property="Background"
                             Value="Transparent" />
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource ItemsSelectedForeground}" />
                 </Style>
             </pu:TabControlHelper.RemoveButtonStyle>
             <!--pu:TabItemHelper.Icon="pack://application:,,,/function-fill.png" pu:IconHelper.Margin="-10,2,5,0"-->
@@ -198,7 +202,8 @@
                                    VerticalAlignment="Top"
                                    Margin="20,15,0,0"
                                    FontSize="18"
-                                   Background="{x:Null}" />
+                                   Background="{x:Null}"
+                                   Foreground="{DynamicResource PageForeground}" />
                             <TextBlock TextWrapping="Wrap"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
@@ -207,26 +212,27 @@
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">新建文件</Run>
+                                MouseLeave="HyperLink_MouseLeave">新建数据文件</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
+                        <Run Foreground="#FF3388FF"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">新建演示文件</Run>
                         <LineBreak></LineBreak>
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
                                 MouseLeave="HyperLink_MouseLeave"
-                                MouseDown="RunOpenFile_Click">打开文件</Run><Run>&#160;或&#160;</Run>
-                        <Run Foreground="#FF3388FF"
-                                TextDecorations="Underline"
-                                Cursor="Hand"
-                                MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">打开文件夹</Run>
+                                MouseDown="RunOpenFile_Click">打开文件</Run>
                             </TextBlock>
                             <Label Content="最近"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Top"
                                    Margin="20,90,0,0"
                                    FontSize="18"
-                                   Background="{x:Null}" />
+                                   Background="{x:Null}"
+                                   Foreground="{DynamicResource PageForeground}" />
                             <TextBlock TextWrapping="Wrap"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
@@ -235,33 +241,39 @@
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">info.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
+                                MouseLeave="HyperLink_MouseLeave">info.lps</Run><Run FontSize="9"
+                                                                                     Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">string.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
+                                MouseLeave="HyperLink_MouseLeave">string.lps</Run><Run FontSize="9"
+                                                                                       Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">l2d.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\l2d\</Run><LineBreak />
+                                MouseLeave="HyperLink_MouseLeave">l2d.lps</Run><Run FontSize="9"
+                                                                                    Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\l2d\</Run><LineBreak />
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">l3d.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\l3d\</Run><LineBreak />
+                                MouseLeave="HyperLink_MouseLeave">l3d.lps</Run><Run FontSize="9"
+                                                                                    Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\l3d\</Run><LineBreak />
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">aa.lps</Run><Run FontSize="9">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run>
+                                MouseLeave="HyperLink_MouseLeave">aa.lps</Run><Run FontSize="9"
+                                                                                   Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run>
                             </TextBlock>
                             <Label Content="帮助"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Top"
                                    Margin="20,220,0,0"
                                    FontSize="18"
+                                   Foreground="{DynamicResource PageForeground}"
                                    Background="{x:Null}" />
                             <TextBlock TextWrapping="Wrap"
                                        HorizontalAlignment="Left"
@@ -298,7 +310,8 @@
                                       Width="280"
                                       HorizontalAlignment="Left"
                                       VerticalAlignment="Top"
-                                      Margin="340,20,0,0" />
+                                      Margin="340,20,0,0"
+                                      Foreground="{DynamicResource PageForeground}"/>
 
                         </Grid>
                     </Viewbox>

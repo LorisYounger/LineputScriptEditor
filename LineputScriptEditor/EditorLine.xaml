@@ -1,14 +1,61 @@
 ﻿<UserControl x:Class="LineputScriptEditor.EditorLine"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LineputScriptEditor"
-             mc:Ignorable="d" 
-             
+             mc:Ignorable="d"
              d:DesignWidth="800"
-             Height="16">
-    <WrapPanel>
-            
+             Height="20">
+    <WrapPanel Background="{DynamicResource LineBackground}">
+        <WrapPanel x:Name="SubsWrap">
+
+        </WrapPanel>
+        <Button x:Name="ButtonText"
+                PreviewMouseDown="TText_MouseDown" />
+        <TextBlock x:Name="TText"
+                   HorizontalAlignment="Left"
+                   Margin="2,2,1,2"
+                   TextWrapping="Wrap"
+                   Text="Text"
+                   VerticalAlignment="Center"
+                   FontSize="14"
+                   PreviewMouseDown="TText_MouseDown"
+                   Foreground="{DynamicResource Text}" />
+        <TextBox x:Name="BText"
+                 TextWrapping="Wrap"
+                 Text="Text"
+                 PreviewLostKeyboardFocus="BText_LostKeyboardFocus"
+                 PreviewKeyDown="BText_KeyDown"
+                 Background="{x:Null}"
+                 Foreground="{DynamicResource Text}" />
+        <TextBlock x:Name="TEnd"
+                   HorizontalAlignment="Left"
+                   Margin="2,0,2,1"
+                   TextWrapping="Wrap"
+                   Text="//"
+                   VerticalAlignment="Center"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   PreviewMouseDown="TComment_MouseDown"
+                   Foreground="{DynamicResource SymbolComment}" />
+        <TextBlock x:Name="TComment"
+                   HorizontalAlignment="Left"
+                   Margin="2,2,1,2"
+                   TextWrapping="Wrap"
+                   Text="Commont"
+                   VerticalAlignment="Center"
+                   FontSize="14"
+                   PreviewMouseDown="TComment_MouseDown"
+                   Foreground="{DynamicResource Comment}" />
+        <TextBox x:Name="BComment"
+                 TextWrapping="Wrap"
+                 Text="Commont"
+                 PreviewLostKeyboardFocus="BComment_LostKeyboardFocus"
+                 PreviewKeyDown="BComment_KeyDown"
+                 Margin="2,0,0,0"
+                 Foreground="{DynamicResource Comment}"
+                 Background="{x:Null}" />
+
     </WrapPanel>
 </UserControl>

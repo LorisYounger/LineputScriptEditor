@@ -11,15 +11,26 @@ namespace LineputScriptEditor
     /// <summary>
     /// Editor.xaml 的交互逻辑
     /// </summary>
-    public partial class Editor : UserControl
+    public partial class LPSEditor : Editor
     {
-        public string FilePath;
-
-        public Editor(string path, LpsDocument lps)
+        public LPSEditor(string path, LpsDocument lps)
         {
             InitializeComponent();
             FilePath = path;
-            loadfromlps(lps);
+            for (int i = 0; i < lps.Count; i++)
+            {
+                int len = Function.IsTableLine(lps, i);
+                if (len > 2)
+                {
+                    List<Line> line = new List<Line>();
+                    for (int j = i; j < i + len; j++)
+                        line.Add(lps[j]);
+                    ListLPSText.Children.Add(new EditorTable(line));
+                    i += len - 1;
+                }
+                else
+                    ListLPSText.Children.Add(new EditorLine(lps[i]));
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,34 +45,6 @@ namespace LineputScriptEditor
                 ColumTreeView.Width = new GridLength(0);
                 ((Button)sender).Content = "<";
             }
-        }
-
-        private void loadfromlps(LpsDocument lps)
-        {
-            //LinePutScriptBox.Document.Blocks.Clear();
-            //foreach (Line line in lps)
-            //{
-            //    Paragraph nl = new Paragraph();
-            //    nl.Inlines.Add(new Run(line.Name) { Foreground = MainWindow.setting.NameColorBrush });
-            //    if (line.info != "")
-            //    {
-            //        nl.Inlines.Add(new Run("#") { Foreground = MainWindow.setting.KeyWordColorBrush });
-            //        nl.Inlines.Add(new Run(line.info) { Foreground = MainWindow.setting.InfoColorBrush });
-            //    }
-            //    nl.Inlines.Add(new Run(":|") { Foreground = MainWindow.setting.KeyWordColorBrush });
-            //    foreach(Sub sub in line)
-            //    {
-            //        nl.Inlines.Add(new Run(sub.Name) { Foreground = MainWindow.setting.NameColorBrush });
-            //        if (line.info != "")
-            //        {
-            //            nl.Inlines.Add(new Run("#") { Foreground = MainWindow.setting.KeyWordColorBrush });
-            //            nl.Inlines.Add(new Run(sub.info) { Foreground = MainWindow.setting.InfoColorBrush });                        
-            //        }
-            //        nl.Inlines.Add(new Run(":|") { Foreground = MainWindow.setting.KeyWordColorBrush });
-            //    }
-            //    nl.Inlines.Add(new Run(line.Text));
-            //    LinePutScriptBox.Document.Blocks.Add(nl);
-            //}
         }
     }
 }

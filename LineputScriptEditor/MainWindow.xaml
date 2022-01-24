@@ -110,12 +110,11 @@
             </MenuItem>
             <MenuItem Header="文件"
                       Margin="3">
-                <MenuItem Header="新建LPS文件" />
-                <MenuItem Header="新建LPT文件" />
+                <MenuItem Header="新建数据LPS" />
+                <MenuItem Header="新建演示LPT" />
                 <Separator />
                 <MenuItem Header="打开文件"
                           Click="MenuOpenFile_Click" />
-                <MenuItem Header="打开文件夹" />
                 <Separator />
                 <MenuItem Header="打开最近的文件" />
                 <Separator />
@@ -208,23 +207,23 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
                                        Margin="25,45,0,0">
+                                <Run Foreground="#FF3388FF"
+                                     TextDecorations="Underline"
+                                     Cursor="Hand"
+                                     MouseEnter="HyperLink_MouseEnter"
+                                     MouseLeave="HyperLink_MouseLeave"
+                                     MouseDown="RunOpenFile_Click">打开文件</Run>
+                                <LineBreak />
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">新建数据文件</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
+                                MouseLeave="HyperLink_MouseLeave">新建数据LPS</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">新建演示文件</Run>
-                        <LineBreak></LineBreak>
-                        <Run Foreground="#FF3388FF"
-                                TextDecorations="Underline"
-                                Cursor="Hand"
-                                MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave"
-                                MouseDown="RunOpenFile_Click">打开文件</Run>
+                                MouseLeave="HyperLink_MouseLeave">新建演示LPT</Run>
                             </TextBlock>
                             <Label Content="最近"
                                    HorizontalAlignment="Left"
@@ -311,7 +310,7 @@
                                       HorizontalAlignment="Left"
                                       VerticalAlignment="Top"
                                       Margin="340,20,0,0"
-                                      Foreground="{DynamicResource PageForeground}"/>
+                                      Foreground="{DynamicResource PageForeground}" />
 
                         </Grid>
                     </Viewbox>

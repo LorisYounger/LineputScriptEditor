@@ -26,14 +26,14 @@ namespace LineputScriptEditor
         public MainWindow()
         {
             InitializeComponent();
-            if(File.Exists(Environment.CurrentDirectory + @"\setting.lps"))
+            if (File.Exists(Environment.CurrentDirectory + @"\setting.lps"))
                 setting = new Setting(File.ReadAllText(Environment.CurrentDirectory + @"\setting.lps"));
             else
                 setting = new Setting();
         }
         public static Setting setting;
-        public List<LPSEditor> Editors = new List<LPSEditor>();
-        
+        public List<Editor> Editors = new List<Editor>();
+
         private void LPTHead_Click(object sender, RoutedEventArgs e)
         {
             if (TabItemMain.Visibility != Visibility.Visible)
@@ -57,8 +57,10 @@ namespace LineputScriptEditor
         }
         public void OpenFile()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "LineputScript文件|*.lps";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "所有支持的文件(*.lps;*.lpt)|*.lps;*.lpt|LinePutScript文件(*.lps)|*.lps|Lineput文件(*.lpt)|*.lpt"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 OpenFile(openFileDialog.FileName);
@@ -67,24 +69,22 @@ namespace LineputScriptEditor
         public void OpenFile(string Path)
         {
             //如果是已经打开过的文件,跳转到那个文件
-            LPSEditor ed = Editors.Find(x => x.FilePath.ToLower() == Path.ToLower());
+            Editor ed = Editors.Find(x => x.FilePath.ToLower() == Path.ToLower());
             if (ed == null)
             {
                 LpsDocument lps = new LpsDocument(File.ReadAllText(Path));
                 ed = new LPSEditor(Path, lps);
                 Editors.Add(ed);
-                int idx = TabControlMain.Items.Add(new TabItem()
-                {
-                    Header = Path.Split('\\').Last(),
-                    Content = ed
-                });
+                int idx = TabControlMain.Items.Add(ed.Father);
                 TabControlMain.Dispatcher.BeginInvoke(new Action(() => { TabControlMain.SelectedIndex = idx; }));
+                ed.FileNameChage = new Action(() => Dispatcher.BeginInvoke(new Action(() => HeaderText.Header = ((TabItem)TabControlMain.SelectedItem).Header)));
             }
             else
             {
                 TabControlMain.SelectedIndex = Editors.IndexOf(ed) + 1;
             }
         }
+
 
         private void HyperLink_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -116,9 +116,25 @@ namespace LineputScriptEditor
                     }
                 }
             }
+            else if (((Editor)send.Content).IsEdit)
+            {
+                e.Cancel = ((Editor)send.Content).ExitSafe() == false;
+            }
             else if (TabControlMain.Items.Count == 2)
             {
                 TabItemMain.Visibility = Visibility.Visible;
+            }
+            else
+            {//开始清除
+                Editor ed = ((Editor)send.Content);
+                if(ed.ExitSafe() == true)
+                {
+                    Editors.Remove(ed);
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
             }
         }
     }

@@ -33,7 +33,7 @@
                    HorizontalAlignment="Left"
                    Margin="2,0,2,1"
                    TextWrapping="Wrap"
-                   Text="//"
+                   Text="///"
                    VerticalAlignment="Center"
                    FontSize="14"
                    FontWeight="Bold"

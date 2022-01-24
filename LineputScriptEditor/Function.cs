@@ -40,11 +40,13 @@ namespace LineputScriptEditor
         }
         public static int IsTableLine(LpsDocument lps, int nodeid)
         {
+            if (lps[nodeid].text != "" || lps[nodeid].Comments != "")
+                return 0;
             bool istable = true;
             int i = nodeid + 1;
             while (istable && ++i < lps.Count)
             {
-                if (lps[nodeid].Name == lps[i].Name && lps[nodeid].Count == lps[i].Count)
+                if (lps[nodeid].Name == lps[i].Name && lps[nodeid].Count == lps[i].Count && lps[i].text == "")
                 {
                     for (int j = 0; j < lps[nodeid].Count; j++)
                     {

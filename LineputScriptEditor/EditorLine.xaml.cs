@@ -10,8 +10,9 @@ namespace LineputScriptEditor
     /// <summary>
     /// EditorLine.xaml 的交互逻辑
     /// </summary>
-    public partial class EditorLine : UserControl
+    public partial class EditorLine : UserControl, IEditorLines
     {
+        public Action SetisEdit;
         public Line ToLine()
         {
             Line lin = ((EditorSub)SubsWrap.Children[0]).ToLine();
@@ -23,22 +24,24 @@ namespace LineputScriptEditor
         }
         public string Text;
         public string Comment;
-        public EditorLine()
+        public EditorLine(Action setisedit)
         {
+            SetisEdit = setisedit;
             InitializeComponent();
-            SubsWrap.Children.Add(new EditorSub(this, true));
+            SubsWrap.Children.Add(new EditorSub(SetisEdit, true));
             Text = "Text";
             Comment = "Comment";
             DisplayReadText();
             DisplayReadComment();
         }
-        public EditorLine(Line line)
+        public EditorLine(Action setisedit, Line line)
         {
+            SetisEdit = setisedit;
             InitializeComponent();
-            SubsWrap.Children.Add(new EditorSub(this, new Sub(line.Name, line.Info), true));
+            SubsWrap.Children.Add(new EditorSub(SetisEdit, new Sub(line.Name, line.Info), true));
             foreach (Sub sub in line.Subs)
             {
-                SubsWrap.Children.Add(new EditorSub(this, sub));
+                SubsWrap.Children.Add(new EditorSub(SetisEdit, sub));
             }
             Text = line.text;
             Comment = line.Comments;
@@ -49,14 +52,14 @@ namespace LineputScriptEditor
         {
             TText.Visibility = Visibility.Collapsed;
             BText.Visibility = Visibility.Visible;
-            BText.Text = Function.TextReplace(Text);
+            BText.Text = Text;
             TextBoxSelect(BText);
         }
         public void DisplayReadText()
         {
             TText.Visibility = Visibility.Visible;
             BText.Visibility = Visibility.Collapsed;
-            TText.Text = Function.TextDeReplace(Text);
+            TText.Text = Text;
             ButtonText.Visibility = (Text == "" ? Visibility.Visible : Visibility.Collapsed);
         }
         public void DisplayEditorComment()
@@ -92,6 +95,7 @@ namespace LineputScriptEditor
         private void BText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             Text = BText.Text;
+            SetisEdit?.Invoke();
             DisplayReadText();
         }
 
@@ -99,7 +103,20 @@ namespace LineputScriptEditor
         {
             if (e.Key == Key.Enter)
             {
-                Text = BText.Text;
+                //开始判断是否可以添加新的sub
+                if (BText.Text.Contains(":|"))
+                {
+                    Line nl = new Line(BText.Text);
+                    SubsWrap.Children.Add(new EditorSub(SetisEdit, new Sub(nl.Name, nl.Info)));
+                    foreach (Sub sub in nl.Subs)
+                    {
+                        SubsWrap.Children.Add(new EditorSub(SetisEdit, sub));
+                    }
+                    Text = nl.Text;
+                }
+                else
+                    Text = BText.Text;
+                SetisEdit?.Invoke();
                 DisplayReadText();
             }
             else if (e.Key == Key.Escape)
@@ -116,6 +133,7 @@ namespace LineputScriptEditor
         private void BComment_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             Comment = BComment.Text;
+            SetisEdit?.Invoke();
             DisplayReadComment();
         }
 
@@ -124,12 +142,18 @@ namespace LineputScriptEditor
             if (e.Key == Key.Enter)
             {
                 Comment = BComment.Text;
+                SetisEdit?.Invoke();
                 DisplayReadComment();
             }
             else if (e.Key == Key.Escape)
             {
                 DisplayReadComment();
             }
+        }
+
+        public Line[] ToLines()
+        {
+            return new Line[] { ToLine() };
         }
     }
 }

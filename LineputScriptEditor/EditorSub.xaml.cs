@@ -13,11 +13,11 @@ namespace LineputScriptEditor
     public partial class EditorSub : UserControl, IEditorLines
     {
         public Sub ESub;
-        EditorLine el;
+        Action SetisEdit;
         public Line ToLine() => new Line(ESub.ToString());
-        public EditorSub(EditorLine ed, Sub sub, bool isLine = false)
+        public EditorSub(Action setisedit, Sub sub, bool isLine = false)
         {
-            el = ed;
+            SetisEdit = setisedit;
             ESub = sub;
             InitializeComponent();
             if (isLine)
@@ -27,9 +27,9 @@ namespace LineputScriptEditor
             DisplayReadName();
             DisplayReadInfo();
         }
-        public EditorSub(EditorLine ed, bool isLine = false)
+        public EditorSub(Action setisedit, bool isLine = false)
         {
-            el = ed;
+            SetisEdit = setisedit;
             InitializeComponent();
             if (isLine)
             {
@@ -99,6 +99,7 @@ namespace LineputScriptEditor
         private void BName_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             ESub.Name = BName.Text;
+            SetisEdit?.Invoke();
             DisplayReadName();
         }
         private void BName_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -106,6 +107,7 @@ namespace LineputScriptEditor
             if (e.Key == System.Windows.Input.Key.Enter)
             {
                 ESub.Name = BName.Text;
+                SetisEdit?.Invoke();
                 DisplayReadName();
             }
             else if (e.Key == System.Windows.Input.Key.Escape)
@@ -121,6 +123,7 @@ namespace LineputScriptEditor
         private void BInfo_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             ESub.info = BInfo.Text;
+            SetisEdit?.Invoke();
             DisplayReadInfo();
         }
         private void BInfo_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -128,6 +131,7 @@ namespace LineputScriptEditor
             if (e.Key == System.Windows.Input.Key.Enter)
             {
                 ESub.info = BInfo.Text;
+                SetisEdit?.Invoke();
                 DisplayReadInfo();
             }
             else if (e.Key == System.Windows.Input.Key.Escape)

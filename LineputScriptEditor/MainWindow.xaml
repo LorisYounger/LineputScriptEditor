@@ -98,6 +98,7 @@
     </Window.Resources>
     <Grid Background="{DynamicResource MemuBackground}">
         <Menu VerticalAlignment="Top"
+              Background="{DynamicResource MemuBackground}"
               FontSize="14">
             <MenuItem Margin="5,3,1,3"
                       Width="20"
@@ -180,12 +181,11 @@
                             Value="{DynamicResource ItemsSelectedForeground}" />
                 </Style>
             </pu:TabControlHelper.RemoveButtonStyle>
-            <!--pu:TabItemHelper.Icon="pack://application:,,,/function-fill.png" pu:IconHelper.Margin="-10,2,5,0"-->
             <TabItem x:Name="TabItemMain"
                      Header="欢迎使用"
-                     pu:TabItemHelper.Icon="L"
+                     pu:TabItemHelper.Icon="function-space.png"
                      pu:IconHelper.Height="20"
-                     pu:IconHelper.Margin="8,0,2,0">
+                     pu:IconHelper.Margin="4,0,0,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto"
                               x:Name="ViewBoxMain"

@@ -13,8 +13,30 @@
                   ColumnHeaderHeight="20"
                   RowHeight="20"
                   Background="{DynamicResource LineBackground}"
-                  Foreground="{DynamicResource SubName}">
-
+                  Foreground="{DynamicResource SubName}"
+                  PreviewMouseWheel="dataTable_PreviewMouseWheel"
+                  LoadingRow="dataTable_LoadingRow">            
         </DataGrid>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem x:Name="ItemInstall"
+                          Header="插入新行"
+                          Click="ItemInstall_Click" />
+                <MenuItem x:Name="ItemAdd"
+                          Header="插入末尾"
+                          Click="ItemAdd_Click" />
+                <Separator />
+                <MenuItem x:Name="ItemCopy"
+                          Header="复制行"
+                          Click="ItemCopy_Click" />
+                <MenuItem x:Name="ItemCopyAdd"
+                          Header="复制行至末尾"
+                          Click="ItemCopyAdd_Click" />
+                <Separator />
+                <MenuItem x:Name="ItemRemove"
+                          Header="删除行"
+                          Click="ItemRemove_Click" />
+            </ContextMenu>
+        </Grid.ContextMenu>
     </Grid>
 </UserControl>

@@ -35,7 +35,8 @@
                 Foreground="White"
                 FontWeight="Bold" />
         <local:ToolBox></local:ToolBox>
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
+        <ScrollViewer x:Name="MainScroll"
+                      VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto"
                       Grid.Column="2">
             <WrapPanel x:Name="ListLPSText"                       

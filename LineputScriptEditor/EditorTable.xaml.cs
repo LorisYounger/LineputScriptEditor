@@ -22,26 +22,8 @@ namespace LineputScriptEditor
     /// </summary>
     public partial class EditorTable : UserControl, IEditorLines
     {
-        public List<string> Names = new List<string>();
-        private ObservableCollection<SimLine> Subss = new ObservableCollection<SimLine>();
-        private class SimLine
-        {
-            public List<string> Line { get; set; }
-            public SimLine(List<string> line)
-            {
-                Line = line;
-                Name = "ABC";
-            }
-            public string Name { get; set; }
-        }
-        public class TMPTest
-        {
-            public TMPTest()
-            {
-                Name = "bcd";
-            }
-            public string Name { get; set; }
-        }
+        private List<string> Names = new List<string>();
+        private ObservableCollection<ObservableCollection<string>> SubList = new ObservableCollection<ObservableCollection<string>>();
         public EditorTable(List<Line> Lines)
         {
             InitializeComponent();
@@ -53,25 +35,115 @@ namespace LineputScriptEditor
             }
             foreach (Line li in Lines)
             {
-                List<string> strs = new List<string>();
+                ObservableCollection<string> strs = new ObservableCollection<string>();
                 strs.Add(li.Info);
                 foreach (Sub sb in li)
                 {
                     strs.Add(sb.Info);
                 }
-                Subss.Add(new SimLine(strs));
+                SubList.Add(strs);
             }
 
             for (int i = 0; i < Names.Count; i++)
             {
-                dataTable.Columns.Add(new DataGridTextColumn() { Header = Names[i], Binding = new Binding("Name"), Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["LineName"] });
+                dataTable.Columns.Add(new DataGridTextColumn() { Header = Names[i], Binding = new Binding($"[{i}]"), Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["LineName"] });
             }
-            dataTable.DataContext = new ObservableCollection<TMPTest>() { new TMPTest(), new TMPTest() };
+            dataTable.ItemsSource = SubList;
         }
 
         public Line[] ToLines()
         {
-            throw new NotImplementedException();
+            List<Line> lines = new List<Line>();
+            foreach(var strs in SubList)
+            {
+                Line line = new Line(Names[0],strs[0]);
+                for(int i = 1;i<strs.Count;i++)
+                    line.AddSub(new Sub(Names[i], strs[i]));
+                lines.Add(line);
+            }
+            return lines.ToArray();
+        }
+
+        private void dataTable_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+            eventArg.RoutedEvent = MouseWheelEvent;
+            eventArg.Source = sender;
+            ((DataGrid)sender).RaiseEvent(eventArg);
+        }
+
+        private void ItemInstall_Click(object sender, RoutedEventArgs e)
+        {
+            if (dataTable.SelectedIndex == -1)
+            {
+                ItemAdd_Click(sender, e);
+            }
+            else
+            {
+                ObservableCollection<string> ss = new ObservableCollection<string>();
+                for (int i = 0; i < Names.Count; i++)
+                {
+                    ss.Add(Names[i]);
+                }
+                SubList.Insert(dataTable.SelectedIndex, ss);
+            }
+
+        }
+
+        private void ItemAdd_Click(object sender, RoutedEventArgs e)
+        {
+            ObservableCollection<string> ss = new ObservableCollection<string>();
+            for (int i = 0; i < Names.Count; i++)
+            {
+                ss.Add(Names[i]);
+            }
+            SubList.Add(ss);
+        }
+
+        private void ItemCopy_Click(object sender, RoutedEventArgs e)
+        {
+            if (dataTable.SelectedIndex != -1)
+            {
+                ObservableCollection<string> ss = new ObservableCollection<string>();
+                ObservableCollection<string> ssr = (ObservableCollection<string>)dataTable.SelectedItem;
+                for (int i = 0; i < Names.Count; i++)
+                {
+                    ss.Add(ssr[i]);
+                }
+                SubList.Insert(dataTable.SelectedIndex, ss);
+            }
+        }
+
+        private void ItemCopyAdd_Click(object sender, RoutedEventArgs e)
+        {
+            if (dataTable.SelectedIndex != -1)
+            {
+                ObservableCollection<string> ss = new ObservableCollection<string>();
+                ObservableCollection<string> ssr = (ObservableCollection<string>)dataTable.SelectedItem;
+                for (int i = 0; i < Names.Count; i++)
+                {
+                    ss.Add(ssr[i]);
+                }
+                SubList.Add(ss);
+            }
+        }
+
+        private void ItemRemove_Click(object sender, RoutedEventArgs e)
+        {
+            if (dataTable.SelectedItems.Count != 0)
+            {
+                object[] l = new object[dataTable.SelectedItems.Count];
+                dataTable.SelectedItems.CopyTo(l, 0);
+                foreach (object obj in l)
+                {
+                    SubList.Remove((ObservableCollection<string>)obj);
+                }
+            }
+        }
+
+        private void dataTable_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = e.Row.GetIndex() + 1;
         }
     }
 }

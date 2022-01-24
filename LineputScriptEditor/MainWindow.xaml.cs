@@ -45,8 +45,10 @@ namespace LineputScriptEditor
 
         private void TabControlMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count != 0)
-                HeaderText.Header = ((TabItem)e.AddedItems[0]).Header;
+            //if (e.AddedItems.Count != 0)
+            //    HeaderText.Header = ((TabItem)e.AddedItems[0]).Header;
+            if (TabControlMain.SelectedItem != null)
+                HeaderText.Header = ((TabItem)TabControlMain.SelectedItem).Header;
         }
 
         private void MenuOpenFile_Click(object sender, RoutedEventArgs e)

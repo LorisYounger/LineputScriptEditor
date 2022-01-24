@@ -49,8 +49,8 @@
     <Reference Include="Panuon.UI.Core, Version=2.2.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Panuon.UI.Core.2.2.4\lib\net45\Panuon.UI.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Panuon.UI.Silver, Version=2.2.15.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Panuon.UI.Silver.2.2.15.1-alpha\lib\net45\Panuon.UI.Silver.dll</HintPath>
+    <Reference Include="Panuon.UI.Silver, Version=2.2.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Panuon.UI.Silver.2.2.16-alpha\lib\net45\Panuon.UI.Silver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -158,7 +158,7 @@
     <Resource Include="Lineput.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="function.png" />
+    <Resource Include="function-space.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="function-fill.png" />

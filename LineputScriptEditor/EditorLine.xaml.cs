@@ -12,7 +12,7 @@ namespace LineputScriptEditor
     /// </summary>
     public partial class EditorLine : UserControl, IEditorLines
     {
-        public Action SetisEdit;
+        public LPSEditor LPSED;
         public Line ToLine()
         {
             Line lin = ((EditorSub)SubsWrap.Children[0]).ToLine();
@@ -24,43 +24,79 @@ namespace LineputScriptEditor
         }
         public string Text;
         public string Comment;
-        public EditorLine(Action setisedit)
+        public EditorLine(LPSEditor lpsed)
         {
-            SetisEdit = setisedit;
+            LPSED = lpsed;
             InitializeComponent();
-            SubsWrap.Children.Add(new EditorSub(SetisEdit, true));
+            SubsWrap.Children.Add(new EditorSub(this, true));
             Text = "Text";
             Comment = "Comment";
             DisplayReadText();
             DisplayReadComment();
         }
-        public EditorLine(Action setisedit, Line line)
+        public EditorLine(LPSEditor lpsed, Line line)
         {
-            SetisEdit = setisedit;
+            LPSED = lpsed;
             InitializeComponent();
-            SubsWrap.Children.Add(new EditorSub(SetisEdit, new Sub(line.Name, line.Info), true));
+            SubsWrap.Children.Add(new EditorSub(this, new Sub(line.Name, line.Info), true));
             foreach (Sub sub in line.Subs)
             {
-                SubsWrap.Children.Add(new EditorSub(SetisEdit, sub));
+                SubsWrap.Children.Add(new EditorSub(this, sub));
             }
-            Text = line.text;
+            Text = line.Text;
             Comment = line.Comments;
             DisplayReadText();
             DisplayReadComment();
         }
         public void DisplayEditorText()
         {
-            TText.Visibility = Visibility.Collapsed;
-            BText.Visibility = Visibility.Visible;
-            BText.Text = Text;
-            TextBoxSelect(BText);
+            if (Text.Contains("\n"))
+            {
+                TText.Visibility = Visibility.Collapsed;
+                BText.Visibility = Visibility.Collapsed;
+
+                TCRLFText.Visibility = Visibility.Collapsed;
+                BCRLFText.Visibility = Visibility.Visible;
+                BCRLFText.Text = Text;
+                TextBoxSelect(BCRLFText);
+            }
+            else
+            {
+                TText.Visibility = Visibility.Collapsed;
+                BText.Visibility = Visibility.Visible;
+
+                TCRLFText.Visibility = Visibility.Collapsed;
+                BCRLFText.Visibility = Visibility.Collapsed;
+
+                BText.Text = Text;
+                TextBoxSelect(BText);
+            }
+
         }
         public void DisplayReadText()
         {
-            TText.Visibility = Visibility.Visible;
-            BText.Visibility = Visibility.Collapsed;
-            TText.Text = Text;
-            ButtonText.Visibility = (Text == "" ? Visibility.Visible : Visibility.Collapsed);
+            if (Text.Contains("\n"))
+            {
+                TText.Visibility = Visibility.Collapsed;
+                BText.Visibility = Visibility.Collapsed;
+
+                TCRLFText.Visibility = Visibility.Visible;
+                BCRLFText.Visibility = Visibility.Collapsed;
+
+                TCRLFText.Text = Text;
+                ButtonText.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                TText.Visibility = Visibility.Visible;
+                BText.Visibility = Visibility.Collapsed;
+
+                TCRLFText.Visibility = Visibility.Collapsed;
+                BCRLFText.Visibility = Visibility.Collapsed;
+
+                TText.Text = Text;
+                ButtonText.Visibility = (Text == "" ? Visibility.Visible : Visibility.Collapsed);
+            }
         }
         public void DisplayEditorComment()
         {
@@ -94,8 +130,23 @@ namespace LineputScriptEditor
 
         private void BText_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            Text = BText.Text;
-            SetisEdit?.Invoke();
+            //开始判断是否可以添加新的sub
+            if (BText.Text.Contains(":|"))
+            {
+                Line nl = new Line(BText.Text);
+                SubsWrap.Children.Add(new EditorSub(this, new Sub(nl.Name, nl.Info)));
+                foreach (Sub sub in nl.Subs)
+                {
+                    SubsWrap.Children.Add(new EditorSub(this, sub));
+                }
+                Text = nl.Text;
+                LPSED.IsEdit = true;
+            }
+            else if (Text != BText.Text)
+            {
+                LPSED.IsEdit = true;
+                Text = BText.Text;
+            }
             DisplayReadText();
         }
 
@@ -103,21 +154,48 @@ namespace LineputScriptEditor
         {
             if (e.Key == Key.Enter)
             {
+                if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+                {//在下方插入
+                    LPSED.InsertLine(this, new EditorLine(LPSED), 1);
+                }
                 //开始判断是否可以添加新的sub
                 if (BText.Text.Contains(":|"))
                 {
                     Line nl = new Line(BText.Text);
-                    SubsWrap.Children.Add(new EditorSub(SetisEdit, new Sub(nl.Name, nl.Info)));
+                    SubsWrap.Children.Add(new EditorSub(this, new Sub(nl.Name, nl.Info)));
                     foreach (Sub sub in nl.Subs)
                     {
-                        SubsWrap.Children.Add(new EditorSub(SetisEdit, sub));
+                        SubsWrap.Children.Add(new EditorSub(this, sub));
                     }
                     Text = nl.Text;
+                    LPSED.IsEdit = true;
+                }
+                else if (Text != BText.Text)
+                {
+                    LPSED.IsEdit = true;
+                    Text = BText.Text;
+                }
+                if (e.KeyboardDevice.Modifiers == ModifierKeys.Shift)
+                {
+                    TText.Visibility = Visibility.Collapsed;
+                    BText.Visibility = Visibility.Collapsed;
+
+                    TCRLFText.Visibility = Visibility.Collapsed;
+                    BCRLFText.Visibility = Visibility.Visible;
+
+                    BCRLFText.Text = Text + '\n';
+                    new Thread(() =>
+                    {
+                        Thread.Sleep(100);
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            BCRLFText.Select(Text.Length + 1, 0);
+                            BCRLFText.Focus();
+                        }));
+                    }).Start();
                 }
                 else
-                    Text = BText.Text;
-                SetisEdit?.Invoke();
-                DisplayReadText();
+                    DisplayReadText();
             }
             else if (e.Key == Key.Escape)
             {
@@ -132,8 +210,11 @@ namespace LineputScriptEditor
 
         private void BComment_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            Comment = BComment.Text;
-            SetisEdit?.Invoke();
+            if (Comment != BComment.Text)
+            {
+                Comment = BComment.Text;
+                LPSED.IsEdit = true;
+            }
             DisplayReadComment();
         }
 
@@ -141,8 +222,11 @@ namespace LineputScriptEditor
         {
             if (e.Key == Key.Enter)
             {
-                Comment = BComment.Text;
-                SetisEdit?.Invoke();
+                if (Comment != BComment.Text)
+                {
+                    Comment = BComment.Text;
+                    LPSED.IsEdit = true;
+                }
                 DisplayReadComment();
             }
             else if (e.Key == Key.Escape)
@@ -154,6 +238,46 @@ namespace LineputScriptEditor
         public Line[] ToLines()
         {
             return new Line[] { ToLine() };
+        }
+        private void BCRLFText_PreviewLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            //开始判断是否可以添加新的sub
+            if (BCRLFText.Text.Contains(":|"))
+            {
+                Line nl = new Line(BCRLFText.Text);
+                SubsWrap.Children.Add(new EditorSub(this, new Sub(nl.Name, nl.Info)));
+                foreach (Sub sub in nl.Subs)
+                {
+                    SubsWrap.Children.Add(new EditorSub(this, sub));
+                }
+                Text = nl.Text;
+                LPSED.IsEdit = true;
+            }
+            else if (Text != BCRLFText.Text)
+            {
+                LPSED.IsEdit = true;
+                Text = BCRLFText.Text;
+            }
+            DisplayReadText();
+        }
+        /// <summary>
+        /// 插入Sub
+        /// </summary>
+        /// <param name="iel">要插入的Sub定位</param>
+        /// <param name="insert">要插入的新Sub</param>
+        /// <param name="position">位置偏移标</param>
+        public void InsertSub(EditorSub iel, EditorSub insert, int position = 0)
+        {
+            int p = SubsWrap.Children.IndexOf(iel) + position;
+            if (p <= 0)
+            {
+                p = 0;
+                iel.SetIsSub();
+                insert.SetIsLine();
+            }
+            else if (p > SubsWrap.Children.Count)
+                p = SubsWrap.Children.Count;
+            SubsWrap.Children.Insert(p, insert);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace LineputScriptEditor
     {
 
 
-        public LPSEditor(string path, LpsDocument lps) : base(path, lps)
+        public LPSEditor(string path, LpsDocument lps) : base(path)
         {
             SaveFile = saveFile;
 
@@ -30,11 +30,11 @@ namespace LineputScriptEditor
                     List<Line> line = new List<Line>();
                     for (int j = i; j < i + len; j++)
                         line.Add(lps[j]);
-                    ListLPSText.Children.Add(new EditorTable(line));
+                    ListLPSText.Children.Add(new EditorTable(this, line));
                     i += len - 1;
                 }
                 else
-                    ListLPSText.Children.Add(new EditorLine(new Action(() => IsEdit = true), lps[i]));
+                    ListLPSText.Children.Add(new EditorLine(this, lps[i]));
             }
 
         }
@@ -101,6 +101,22 @@ namespace LineputScriptEditor
                         SaveFile();
                         break;
                 }
+        }
+
+        /// <summary>
+        /// 插入行
+        /// </summary>
+        /// <param name="iel">要插入的行定位</param>
+        /// <param name="insert">要插入的新行</param>
+        /// <param name="position">位置偏移标</param>
+        public void InsertLine(UIElement iel, UIElement insert, int position = 0)
+        {
+            int p = ListLPSText.Children.IndexOf(iel) + position;
+            if (p < 0)
+                p = 0;
+            else if (p > ListLPSText.Children.Count)
+                p = ListLPSText.Children.Count;
+            ListLPSText.Children.Insert(p, insert);
         }
     }
 }

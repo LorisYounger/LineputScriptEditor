@@ -23,9 +23,11 @@ namespace LineputScriptEditor
     public partial class EditorTable : UserControl, IEditorLines
     {
         private List<string> Names = new List<string>();
+        public LPSEditor LPSED;
         private ObservableCollection<ObservableCollection<string>> SubList = new ObservableCollection<ObservableCollection<string>>();
-        public EditorTable(List<Line> Lines)
+        public EditorTable(LPSEditor lpsed, List<Line> Lines)
         {
+            LPSED = lpsed;
             InitializeComponent();
             Names.Add(Lines[0].Name);
 
@@ -54,10 +56,10 @@ namespace LineputScriptEditor
         public Line[] ToLines()
         {
             List<Line> lines = new List<Line>();
-            foreach(var strs in SubList)
+            foreach (var strs in SubList)
             {
-                Line line = new Line(Names[0],strs[0]);
-                for(int i = 1;i<strs.Count;i++)
+                Line line = new Line(Names[0], strs[0]);
+                for (int i = 1; i < strs.Count; i++)
                     line.AddSub(new Sub(Names[i], strs[i]));
                 lines.Add(line);
             }

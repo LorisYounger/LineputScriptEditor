@@ -12,7 +12,7 @@ namespace LineputScriptEditor
     {
 
         public TabItem Father;
-        public Editor(string path, LpsDocument lps)
+        public Editor(string path)
         {           
             FilePath = path;
             Father = new TabItem()
@@ -20,7 +20,6 @@ namespace LineputScriptEditor
                 Header = fileName,
                 Content = this,
             };
-
         }
         public string FileName
         {
@@ -55,7 +54,7 @@ namespace LineputScriptEditor
                 isedit = value;
                 if (value)
                 {
-                    Father.Header = '*' + fileName;
+                    Father.Header = '*' + fileName;                   
                 }
                 else
                 {

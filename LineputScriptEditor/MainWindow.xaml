@@ -214,16 +214,17 @@
                                      MouseLeave="HyperLink_MouseLeave"
                                      MouseDown="RunOpenFile_Click">打开文件</Run>
                                 <LineBreak />
+                                <Run Foreground="{DynamicResource PageForeground}">新建</Run>
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">新建数据LPS</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
+                                MouseLeave="HyperLink_MouseLeave">数据LPS</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">新建演示LPT</Run>
+                                MouseLeave="HyperLink_MouseLeave">演示LPT</Run>
                             </TextBlock>
                             <Label Content="最近"
                                    HorizontalAlignment="Left"

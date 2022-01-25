@@ -13,11 +13,11 @@ namespace LineputScriptEditor
     public partial class EditorSub : UserControl, IEditorLines
     {
         public Sub ESub;
-        Action SetisEdit;
+        public EditorLine EL;
         public Line ToLine() => new Line(ESub.ToString());
-        public EditorSub(Action setisedit, Sub sub, bool isLine = false)
+        public EditorSub(EditorLine el, Sub sub, bool isLine = false)
         {
-            SetisEdit = setisedit;
+            EL = el;
             ESub = sub;
             InitializeComponent();
             if (isLine)
@@ -27,9 +27,9 @@ namespace LineputScriptEditor
             DisplayReadName();
             DisplayReadInfo();
         }
-        public EditorSub(Action setisedit, bool isLine = false)
+        public EditorSub(EditorLine el, bool isLine = false)
         {
-            SetisEdit = setisedit;
+            EL = el;
             InitializeComponent();
             if (isLine)
             {
@@ -98,16 +98,22 @@ namespace LineputScriptEditor
         }
         private void BName_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            ESub.Name = BName.Text;
-            SetisEdit?.Invoke();
+            if (ESub.Name != BName.Text)
+            {
+                ESub.Name = BName.Text;
+                EL.LPSED.IsEdit = true;
+            }
             DisplayReadName();
         }
         private void BName_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                ESub.Name = BName.Text;
-                SetisEdit?.Invoke();
+                if (ESub.Name != BName.Text)
+                {
+                    ESub.Name = BName.Text;
+                    EL.LPSED.IsEdit = true;
+                }
                 DisplayReadName();
             }
             else if (e.Key == System.Windows.Input.Key.Escape)
@@ -122,16 +128,22 @@ namespace LineputScriptEditor
         }
         private void BInfo_LostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            ESub.info = BInfo.Text;
-            SetisEdit?.Invoke();
+            if (ESub.info != BInfo.Text)
+            {
+                ESub.info = BInfo.Text;
+                EL.LPSED.IsEdit = true;
+            }
             DisplayReadInfo();
         }
         private void BInfo_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
             {
-                ESub.info = BInfo.Text;
-                SetisEdit?.Invoke();
+                if (ESub.info != BInfo.Text)
+                {
+                    ESub.info = BInfo.Text;
+                    EL.LPSED.IsEdit = true;
+                }
                 DisplayReadInfo();
             }
             else if (e.Key == System.Windows.Input.Key.Escape)
@@ -143,6 +155,105 @@ namespace LineputScriptEditor
         public Line[] ToLines()
         {
             return new Line[] { ToLine() };
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            EL.InsertSub(this, new EditorSub(EL));
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            EL.InsertSub(this, new EditorSub(EL), 1);
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            int p = EL.SubsWrap.Children.IndexOf(this) - 1;
+            if (p <= -1)
+            {
+                return;
+            }
+            else if (p == 0)
+            {
+                SetIsLine();
+                ((EditorSub)EL.SubsWrap.Children[0]).SetIsSub();
+            }
+            EL.SubsWrap.Children.Remove(this);
+            EL.SubsWrap.Children.Insert(p, this);
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            int p = EL.SubsWrap.Children.IndexOf(this) + 1;
+            if (p >= EL.SubsWrap.Children.Count)
+            {
+                return;
+            }
+            else if (p == 1)
+            {
+                SetIsSub();
+                ((EditorSub)EL.SubsWrap.Children[1]).SetIsLine();
+            }
+
+            EL.SubsWrap.Children.Remove(this);
+            EL.SubsWrap.Children.Insert(p, this);
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+            EL.SubsWrap.Children.Remove(this);
+            SetIsLine();
+            ((EditorSub)EL.SubsWrap.Children[0]).SetIsSub();
+            EL.SubsWrap.Children.Insert(0, this);
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_5(object sender, RoutedEventArgs e)
+        {
+            if (EL.SubsWrap.Children.Count == 1)
+                return;
+            if (EL.SubsWrap.Children.IndexOf(this) == 0)
+            {
+                SetIsSub();
+                ((EditorSub)EL.SubsWrap.Children[1]).SetIsLine();
+            }
+            EL.SubsWrap.Children.Remove(this);
+            EL.SubsWrap.Children.Add(this);
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_6(object sender, RoutedEventArgs e)
+        {
+            if (EL.SubsWrap.Children.Count == 1)
+            {
+                EL.LPSED.ListLPSText.Children.Remove(EL);
+            }
+            else
+            {
+                if (EL.SubsWrap.Children.IndexOf(this) == 0)
+                {
+                    ((EditorSub)EL.SubsWrap.Children[1]).SetIsLine();
+                }
+                EL.SubsWrap.Children.Remove(this);
+            }
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_7(object sender, RoutedEventArgs e)
+        {
+            EL.InsertSub(this, new EditorSub(EL,new Sub((Sub)ESub.Clone())),1);
+            EL.LPSED.IsEdit = true;
+        }
+
+        private void MenuItem_Click_8(object sender, RoutedEventArgs e)
+        {
+            EL.SubsWrap.Children.Add(new EditorSub(EL, new Sub((Sub)ESub.Clone())));
+            EL.LPSED.IsEdit = true;
         }
     }
 }

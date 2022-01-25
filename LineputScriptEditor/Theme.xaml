@@ -12,7 +12,7 @@
     <SolidColorBrush x:Key="Info"
                      Color="#93055E" />
     <SolidColorBrush x:Key="Text"
-                     Color="#A3156E" />
+                     Color="#524" />
     <SolidColorBrush x:Key="Comment"
                      Color="#080" />
     <SolidColorBrush x:Key="SymbolHash"
@@ -26,7 +26,7 @@
     <SolidColorBrush x:Key="MemuHeadBackground"
                      Color="#FFD9E0F8" />
     <SolidColorBrush x:Key="PageBackground"
-                     Color="#FFF" />
+                     Color="#FFFCFEFF" />
     <SolidColorBrush x:Key="PageForeground"
                      Color="#000" />
     <SolidColorBrush x:Key="TABBackground"

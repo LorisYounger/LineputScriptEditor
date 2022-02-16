@@ -37,4 +37,8 @@
                      Color="#3B4F81" />
     <SolidColorBrush x:Key="ItemsSelectedForeground"
                      Color="#000" />
+    <SolidColorBrush x:Key="HyperLink"
+                     Color="#FF3388FF" />
+    <SolidColorBrush x:Key="HyperLinkDark"
+                     Color="#FF1E64C8" />
 </ResourceDictionary>

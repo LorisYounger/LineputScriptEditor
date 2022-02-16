@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="LinePutScript 编辑器"
         Height="500"
-        Width="700">
+        Width="700" Closing="Window_Closing">
     <Window.Resources>
         <ControlTemplate x:Key="MenuItemControlNT"
                          TargetType="{x:Type MenuItem}">
@@ -110,7 +110,7 @@
             </MenuItem>
             <MenuItem Header="文件"
                       Margin="3">
-                <MenuItem Header="新建数据LPS" />
+                <MenuItem Header="新建数据LPS" MouseDown="MenuNewLPS" />
                 <MenuItem Header="新建演示LPT" />
                 <Separator />
                 <MenuItem Header="打开文件"
@@ -118,9 +118,9 @@
                 <Separator />
                 <MenuItem Header="打开最近的文件" />
                 <Separator />
-                <MenuItem Header="保存" />
-                <MenuItem Header="另存为" />
-                <MenuItem Header="全部保存" />
+                <MenuItem Header="保存" Click="MenuSave" />
+                <MenuItem Header="另存为" Click="SaveAs" />
+                <MenuItem Header="全部保存" Click="SaveAll" />
                 <Separator />
                 <MenuItem Header="还原文件" />
                 <MenuItem Header="关闭窗口" />
@@ -207,24 +207,24 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
                                        Margin="25,45,0,0">
-                                <Run Foreground="#FF3388FF"
+                                <Run Foreground="{DynamicResource PageForeground}">新建</Run>                              
+                        <Run Foreground="{DynamicResource HyperLink}"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave" MouseLeftButtonDown="Run_MouseLeftButtonDown_1">数据LPS</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
+                        <Run Foreground="{DynamicResource HyperLink}"
+                                TextDecorations="Underline"
+                                Cursor="Hand"
+                                MouseEnter="HyperLink_MouseEnter"
+                                MouseLeave="HyperLink_MouseLeave">演示LPT</Run>
+                                  <LineBreak/>
+                                <Run Foreground="{DynamicResource HyperLink}"
                                      TextDecorations="Underline"
                                      Cursor="Hand"
                                      MouseEnter="HyperLink_MouseEnter"
                                      MouseLeave="HyperLink_MouseLeave"
                                      MouseDown="RunOpenFile_Click">打开文件</Run>
-                                <LineBreak />
-                                <Run Foreground="{DynamicResource PageForeground}">新建</Run>
-                        <Run Foreground="#FF3388FF"
-                                TextDecorations="Underline"
-                                Cursor="Hand"
-                                MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">数据LPS</Run><Run Foreground="{DynamicResource PageForeground}">&#160;或</Run>
-                        <Run Foreground="#FF3388FF"
-                                TextDecorations="Underline"
-                                Cursor="Hand"
-                                MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">演示LPT</Run>
                             </TextBlock>
                             <Label Content="最近"
                                    HorizontalAlignment="Left"
@@ -233,16 +233,16 @@
                                    FontSize="18"
                                    Background="{x:Null}"
                                    Foreground="{DynamicResource PageForeground}" />
-                            <TextBlock TextWrapping="Wrap"
+                            <TextBlock x:Name="TextHistory" TextWrapping="Wrap"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
                                        Margin="25,120,0,0">                     
-                        <Run Foreground="#FF3388FF"
+                        <Run Foreground="{DynamicResource HyperLink}"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
-                                MouseLeave="HyperLink_MouseLeave">info.lps</Run><Run FontSize="9"
-                                                                                     Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
+                                MouseLeave="HyperLink_MouseLeave" MouseLeftButtonDown="Run_MouseLeftButtonDown">info.lps</Run>
+                                <Run FontSize="9" Foreground="{DynamicResource PageForeground}">&#160;&#160;...\Projects\LineputScriptEditor\LineputScriptEditor\</Run><LineBreak />
                         <Run Foreground="#FF3388FF"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
@@ -279,27 +279,27 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Top"
                                        Margin="25,250,0,0">
-                        <Run Foreground="#FF3388FF"
+                        <Run Foreground="{DynamicResource HyperLink}"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
                                 MouseLeave="HyperLink_MouseLeave">快速入门</Run><LineBreak />
-                        <Run Foreground="#FF3388FF"
+                        <Run Foreground="{DynamicResource HyperLink}"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
                                 MouseLeave="HyperLink_MouseLeave">指令速查表</Run><LineBreak />
-                        <Run Foreground="#FF3388FF"
+                        <Run Foreground="{DynamicResource HyperLink}"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
                                 MouseLeave="HyperLink_MouseLeave">关于LPS编辑器</Run><LineBreak />
-                        <Run Foreground="#FF3388FF"
+                        <Run Foreground="{DynamicResource HyperLink}"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
                                 MouseLeave="HyperLink_MouseLeave">关于LineputScript</Run><LineBreak />
-                        <Run Foreground="#FF3388FF"
+                        <Run Foreground="{DynamicResource HyperLink}"
                                 TextDecorations="Underline"
                                 Cursor="Hand"
                                 MouseEnter="HyperLink_MouseEnter"
@@ -311,7 +311,7 @@
                                       HorizontalAlignment="Left"
                                       VerticalAlignment="Top"
                                       Margin="340,20,0,0"
-                                      Foreground="{DynamicResource PageForeground}" />
+                                      Foreground="{DynamicResource PageForeground}" Background="{x:Null}" />
 
                         </Grid>
                     </Viewbox>

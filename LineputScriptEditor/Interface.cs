@@ -13,13 +13,17 @@ namespace LineputScriptEditor
 
         public TabItem Father;
         public Editor(string path)
-        {           
+        {
             FilePath = path;
             Father = new TabItem()
             {
                 Header = fileName,
                 Content = this,
             };
+            if (filePath != null)
+            {
+                MainWindow.setting.AddHistory(FileName, FilePath);
+            }
         }
         public string FileName
         {
@@ -54,7 +58,7 @@ namespace LineputScriptEditor
                 isedit = value;
                 if (value)
                 {
-                    Father.Header = '*' + fileName;                   
+                    Father.Header = '*' + fileName;
                 }
                 else
                 {
@@ -69,6 +73,7 @@ namespace LineputScriptEditor
         public Action<bool> IsEditChange;
         public Action FileNameChage;
         public Func<bool> SaveFile;
+        public Func<bool> SaveAsFile;
         /// <summary>
         /// 在退出前寻问是否需要保存
         /// </summary>

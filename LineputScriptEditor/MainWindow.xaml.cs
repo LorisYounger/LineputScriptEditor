@@ -30,10 +30,42 @@ namespace LineputScriptEditor
                 setting = new Setting(File.ReadAllText(Environment.CurrentDirectory + @"\setting.lps"));
             else
                 setting = new Setting();
+            setting.HistoryChange = RelsHistory;
+            RelsHistory();
         }
         public static Setting setting;
         public List<Editor> Editors = new List<Editor>();
-
+        public void RelsHistory()
+        {
+            TextHistory.Inlines.Clear();
+            for (int i = 0; i < setting["openhistory"].Count() && i < 5; i++)
+            {
+                string ns = setting["openhistory"][i].Name;
+                if (ns.Length >= 15)
+                {
+                    ns = ns.Substring(0, 5) + ".." + ns.Substring(ns.Length - 5, 5);
+                }
+                Run r = new Run(ns);
+                r.Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["HyperLink"];
+                r.TextDecorations = TextDecorations.Underline;
+                r.Cursor = Cursors.Hand;
+                r.MouseEnter += HyperLink_MouseEnter;
+                r.MouseLeave += HyperLink_MouseLeave;
+                r.MouseLeftButtonDown += Run_MouseLeftButtonDown;
+                ns = setting["openhistory"][i].Info;
+                r.Tag = ns;
+                TextHistory.Inlines.Add(r);
+                if (ns.Length >= 40)
+                {
+                    ns = "..." + ns.Substring(ns.Length - 37, 37);
+                }
+                r = new Run(ns);
+                r.Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["PageForeground"];
+                r.FontSize = 9;
+                TextHistory.Inlines.Add(r);
+                TextHistory.Inlines.Add(new LineBreak());
+            }
+        }
         private void LPTHead_Click(object sender, RoutedEventArgs e)
         {
             if (TabItemMain.Visibility != Visibility.Visible)
@@ -81,19 +113,26 @@ namespace LineputScriptEditor
             }
             else
             {
-                TabControlMain.SelectedIndex = Editors.IndexOf(ed) + 1;
+                TabControlMain.Dispatcher.BeginInvoke(new Action(() => { TabControlMain.SelectedIndex = Editors.IndexOf(ed) + 1; }));
             }
         }
-
+        public void OpenNewLPS()
+        {
+            Editor ed = new LPSEditor("新建LPS文档", new LpsDocument(":|"));
+            Editors.Add(ed);
+            int idx = TabControlMain.Items.Add(ed.Father);
+            TabControlMain.Dispatcher.BeginInvoke(new Action(() => { TabControlMain.SelectedIndex = idx; }));
+            ed.FileNameChage = new Action(() => Dispatcher.BeginInvoke(new Action(() => HeaderText.Header = ((TabItem)TabControlMain.SelectedItem).Header)));
+        }
 
         private void HyperLink_MouseEnter(object sender, MouseEventArgs e)
         {
-            ((Run)sender).Foreground = new SolidColorBrush(Color.FromRgb(30, 100, 200));
+            ((Run)sender).Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["HyperLinkDark"];
         }
 
         private void HyperLink_MouseLeave(object sender, MouseEventArgs e)
         {
-            ((Run)sender).Foreground = new SolidColorBrush(Color.FromRgb(51, 136, 255));
+            ((Run)sender).Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["HyperLink"];
         }
 
         private void RunOpenFile_Click(object sender, MouseButtonEventArgs e)
@@ -127,7 +166,7 @@ namespace LineputScriptEditor
             else
             {//开始清除
                 Editor ed = ((Editor)send.Content);
-                if(ed.ExitSafe() == true)
+                if (ed.ExitSafe() == true)
                 {
                     Editors.Remove(ed);
                 }
@@ -136,6 +175,51 @@ namespace LineputScriptEditor
                     e.Cancel = true;
                 }
             }
+        }
+
+        private void Run_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFile((string)((Run)sender).Tag);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            foreach (Editor ed in Editors)
+            {
+                if (!ed.ExitSafe())
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            File.WriteAllText(Environment.CurrentDirectory + @"\setting.lps", setting.ToString());
+        }
+
+        private void Run_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
+        {
+            OpenNewLPS();
+        }
+
+        private void MenuNewLPS(object sender, MouseButtonEventArgs e)
+        {
+            OpenNewLPS();
+        }
+
+        private void MenuSave(object sender, RoutedEventArgs e)
+        {
+            if (TabControlMain.SelectedItem != null && TabControlMain.SelectedIndex != 0)
+                ((Editor)TabControlMain.SelectedItem).SaveFile();
+        }
+
+        private void SaveAs(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveAll(object sender, RoutedEventArgs e)
+        {
+            foreach(Editor ed in Editors)
+                ed.SaveFile();
         }
     }
 }

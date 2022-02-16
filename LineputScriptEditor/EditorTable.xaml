@@ -15,7 +15,7 @@
                   Background="{DynamicResource LineBackground}"
                   Foreground="{DynamicResource SubName}"
                   PreviewMouseWheel="dataTable_PreviewMouseWheel"
-                  LoadingRow="dataTable_LoadingRow">            
+                  LoadingRow="dataTable_LoadingRow" CellEditEnding="dataTable_CellEditEnding">            
         </DataGrid>
         <Grid.ContextMenu>
             <ContextMenu>

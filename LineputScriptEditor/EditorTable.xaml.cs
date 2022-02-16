@@ -58,10 +58,16 @@ namespace LineputScriptEditor
             List<Line> lines = new List<Line>();
             foreach (var strs in SubList)
             {
+                bool isnoempty = false;
+                isnoempty = isnoempty || !string.IsNullOrEmpty(strs[0]);
                 Line line = new Line(Names[0], strs[0]);
                 for (int i = 1; i < strs.Count; i++)
+                {
+                    isnoempty = isnoempty || !string.IsNullOrEmpty(strs[i]);
                     line.AddSub(new Sub(Names[i], strs[i]));
-                lines.Add(line);
+                }
+                if (!isnoempty)
+                    lines.Add(line);
             }
             return lines.ToArray();
         }
@@ -88,8 +94,8 @@ namespace LineputScriptEditor
                     ss.Add(Names[i]);
                 }
                 SubList.Insert(dataTable.SelectedIndex, ss);
+                LPSED.IsEdit = true;
             }
-
         }
 
         private void ItemAdd_Click(object sender, RoutedEventArgs e)
@@ -100,6 +106,7 @@ namespace LineputScriptEditor
                 ss.Add(Names[i]);
             }
             SubList.Add(ss);
+            LPSED.IsEdit = true;
         }
 
         private void ItemCopy_Click(object sender, RoutedEventArgs e)
@@ -113,6 +120,7 @@ namespace LineputScriptEditor
                     ss.Add(ssr[i]);
                 }
                 SubList.Insert(dataTable.SelectedIndex, ss);
+                LPSED.IsEdit = true;
             }
         }
 
@@ -127,6 +135,7 @@ namespace LineputScriptEditor
                     ss.Add(ssr[i]);
                 }
                 SubList.Add(ss);
+                LPSED.IsEdit = true;
             }
         }
 
@@ -140,12 +149,18 @@ namespace LineputScriptEditor
                 {
                     SubList.Remove((ObservableCollection<string>)obj);
                 }
+                LPSED.IsEdit = true;
             }
         }
 
         private void dataTable_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             e.Row.Header = e.Row.GetIndex() + 1;
+        }
+
+        private void dataTable_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            LPSED.IsEdit = true;
         }
     }
 }

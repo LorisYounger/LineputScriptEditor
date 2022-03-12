@@ -1,21 +1,11 @@
-﻿<UserControl x:Class="LineputScriptEditor.ToolBox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:LineputScriptEditor"
-             mc:Ignorable="d"
-             d:DesignHeight="450"
-             Width="160">
+﻿<UserControl x:Class="LineputScriptEditor.ToolBox" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:LineputScriptEditor"
+        mc:Ignorable="d" d:DesignHeight="450" Width="160">
     <Grid Background="#F7F9FE">
-        <Button Content="工具箱"
-                HorizontalAlignment="Stretch"
-                Margin="2"
-                VerticalAlignment="Top"
-                Grid.Column="0"
-                Background="#40568D"
-                Foreground="White"
-                Height="20">
+        <Button Content="工具箱" HorizontalAlignment="Stretch" Margin="2" VerticalAlignment="Top" Grid.Column="0"
+                Background="#40568D" Foreground="White" Height="20">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="新建工具箱" />
@@ -26,24 +16,26 @@
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>
-            <WrapPanel x:Name="ListToolBox"
-                       Orientation="Vertical"
-                       Margin="0,24,0,0">
-                <Button Content="添加新行 (Line)"
-                    Margin="5,2,5,2"
-                        VerticalAlignment="Top"
-                        Background="#FFE6E7EF"
-                        Width="140" />
-                <Button Content="添加新表格"
-                        Margin="0,2,0,2"
-                        VerticalAlignment="Top"
-                        Background="#FFE6E7EF"
-                        Width="140" />
-                <Button Content="添加新快捷功能"
-                        Margin="0,2,0,2"
-                        VerticalAlignment="Top"
-                        Background="#FFE6E7EF"
-                        Width="140" />
-            </WrapPanel>
+        <Grid x:Name="GridInput" Background="{DynamicResource MemuHeadBackground}" VerticalAlignment="Top"
+                Margin="5,26,5,0" Height="100">
+            <Label x:Name="LableDesc" Content="新建行 内容:" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Background="{x:Null}" Margin="0,-3,0,0" />
+            <TextBox x:Name="TextBoxInput" Width="140" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    AcceptsReturn="True" Height="60" Background="{DynamicResource LineBackground}"
+                    Foreground="{DynamicResource ItemsSelectedForeground}" FontSize="9"
+                    VerticalContentAlignment="Top" HorizontalContentAlignment="Left"
+                    VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="5,19,0,0"/>
+            <Button x:Name="ButtonOK" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Background="{DynamicResource MemuBackground}" Content="确认" Margin="0,0,5,3" Click="ButtonOK_Click" />
+            <Button x:Name="ButtonClose" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                    Background="{DynamicResource MemuBackground}" Content="取消" Margin="5,0,0,3"
+                    Click="ButtonClose_Click" />
+        </Grid>
+        <WrapPanel x:Name="ListToolBox" Orientation="Vertical" Margin="0,128,0,0">
+            <Button x:Name="ButtonNewLine" Content="添加新行 (Line)" Margin="5,2,5,2" VerticalAlignment="Top"
+                    Background="#FFE6E7EF" Width="150" Click="ButtonNewLine_Click" />
+            <Button x:Name="ButtonNewTable" Content="添加新表格" Margin="0,2,0,2" VerticalAlignment="Top" Background="#FFE6E7EF" Width="150" Click="ButtonNewTable_Click" />
+            <Button x:Name="ButtonNewFunction" Content="添加新快捷功能" Margin="0,2,0,2" VerticalAlignment="Top" Background="#FFE6E7EF" Width="150" Click="ButtonNewFunction_Click" />
+        </WrapPanel>
     </Grid>
 </UserControl>

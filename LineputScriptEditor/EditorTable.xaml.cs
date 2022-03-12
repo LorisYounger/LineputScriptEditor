@@ -58,15 +58,15 @@ namespace LineputScriptEditor
             List<Line> lines = new List<Line>();
             foreach (var strs in SubList)
             {
-                bool isnoempty = false;
-                isnoempty = isnoempty || !string.IsNullOrEmpty(strs[0]);
+                //bool isnoempty = false;
+                //isnoempty = isnoempty || !string.IsNullOrEmpty(strs[0]);
                 Line line = new Line(Names[0], strs[0]);
                 for (int i = 1; i < strs.Count; i++)
                 {
-                    isnoempty = isnoempty || !string.IsNullOrEmpty(strs[i]);
+                    //isnoempty = isnoempty || !string.IsNullOrEmpty(strs[i]);
                     line.AddSub(new Sub(Names[i], strs[i]));
                 }
-                if (!isnoempty)
+                //if (isnoempty)
                     lines.Add(line);
             }
             return lines.ToArray();

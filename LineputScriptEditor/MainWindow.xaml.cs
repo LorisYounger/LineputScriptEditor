@@ -179,7 +179,11 @@ namespace LineputScriptEditor
 
         private void Run_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            OpenFile((string)((Run)sender).Tag);
+            string filepath = (string)((Run)sender).Tag;
+            if (File.Exists(filepath))
+                OpenFile(filepath);
+            else
+                MessageBox.Show("文件已被移动或删除","无法打开");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -199,16 +203,10 @@ namespace LineputScriptEditor
         {
             OpenNewLPS();
         }
-
-        private void MenuNewLPS(object sender, MouseButtonEventArgs e)
-        {
-            OpenNewLPS();
-        }
-
         private void MenuSave(object sender, RoutedEventArgs e)
         {
             if (TabControlMain.SelectedItem != null && TabControlMain.SelectedIndex != 0)
-                ((Editor)TabControlMain.SelectedItem).SaveFile();
+                ((Editor)((TabItem)TabControlMain.SelectedItem).Content).SaveFile();
         }
 
         private void SaveAs(object sender, RoutedEventArgs e)
@@ -218,8 +216,13 @@ namespace LineputScriptEditor
 
         private void SaveAll(object sender, RoutedEventArgs e)
         {
-            foreach(Editor ed in Editors)
+            foreach (Editor ed in Editors)
                 ed.SaveFile();
+        }
+
+        private void MenuNewLPS(object sender, RoutedEventArgs e)
+        {
+            OpenNewLPS();
         }
     }
 }

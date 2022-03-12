@@ -80,20 +80,22 @@ namespace LineputScriptEditor
         /// <returns>如果为True,则允许关闭. 如果为false,则不允许关闭</returns>
         public bool ExitSafe()
         {
-            switch (MessageBox.Show($"是否要保存对 {FileName} 的更改?", "如果不保存,你的更改将会丢失", MessageBoxButton.YesNoCancel))
-            {
-                case MessageBoxResult.Yes:
-                    if (SaveFile?.Invoke() == true)
-                    {
+            if (isedit)
+                switch (MessageBox.Show($"是否要保存对 {FileName} 的更改?", "如果不保存,你的更改将会丢失", MessageBoxButton.YesNoCancel))
+                {
+                    case MessageBoxResult.Yes:
+                        if (SaveFile?.Invoke() == true)
+                        {
+                            return true;
+                        }
+                        return false;
+                    case MessageBoxResult.No:
                         return true;
-                    }
-                    return false;
-                case MessageBoxResult.No:
-                    return true;
-                default:
-                    return false;
-            }
-
+                    default:
+                        return false;
+                }
+            else
+                return true;
         }
     }
 

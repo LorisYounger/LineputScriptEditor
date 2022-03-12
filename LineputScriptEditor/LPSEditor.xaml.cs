@@ -36,14 +36,14 @@ namespace LineputScriptEditor
                 else
                     ListLPSText.Children.Add(new EditorLine(this, lps[i]));
             }
-
+            GridToolBox.Children.Add(new ToolBox(this));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (ColumTreeView.Width.Value == 0)
             {
-                ColumTreeView.Width = new GridLength(200);
+                ColumTreeView.Width = new GridLength(160);
                 ((Button)sender).Content = ">";
             }
             else

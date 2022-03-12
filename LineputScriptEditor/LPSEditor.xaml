@@ -34,7 +34,8 @@
                 Background="#FF5D6B99"
                 Foreground="White"
                 FontWeight="Bold" />
-        <local:ToolBox></local:ToolBox>
+        <!--<local:ToolBox></local:ToolBox>-->
+        <Grid x:Name="GridToolBox"></Grid>
         <ScrollViewer x:Name="MainScroll"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto"

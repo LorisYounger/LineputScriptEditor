@@ -10,7 +10,7 @@ namespace LineputScriptEditor
     /// <summary>
     /// EditorLine.xaml 的交互逻辑
     /// </summary>
-    public partial class EditorLine : UserControl, IEditorLines
+    public partial class EditorLine : UserControl, IEditorLines, ISizeChange
     {
         public LPSEditor LPSED;
         public Line ToLine()
@@ -20,6 +20,8 @@ namespace LineputScriptEditor
             {
                 lin.AddSub(((EditorSub)SubsWrap.Children[i]).ESub);
             }
+            lin.Text = Text.Replace("\r","");
+            lin.Comments = Comment;
             return lin;
         }
         public string Text;
@@ -58,6 +60,7 @@ namespace LineputScriptEditor
                 TCRLFText.Visibility = Visibility.Collapsed;
                 BCRLFText.Visibility = Visibility.Visible;
                 BCRLFText.Text = Text;
+                BCRLFText.Margin = new Thickness(0, MainWrap.ActualHeight, 0, 0);
                 TextBoxSelect(BCRLFText);
             }
             else
@@ -84,6 +87,7 @@ namespace LineputScriptEditor
                 BCRLFText.Visibility = Visibility.Collapsed;
 
                 TCRLFText.Text = Text;
+                TCRLFText.Margin = new Thickness(5, MainWrap.ActualHeight + 2, 1, 2);
                 ButtonText.Visibility = Visibility.Collapsed;
             }
             else
@@ -278,6 +282,27 @@ namespace LineputScriptEditor
             else if (p > SubsWrap.Children.Count)
                 p = SubsWrap.Children.Count;
             SubsWrap.Children.Insert(p, insert);
+        }
+
+        private void SubsWrap_SizeChanged(object sender, SizeChangedEventArgs e) => SizeChange();
+        public void SizeChange()
+        {
+            if (SubsWrap.ActualWidth >= LPSED.MainScroll.ActualWidth + 200 && MainWrap.Height == 20)
+            {
+                MainWrap.Height = double.NaN;
+                MainWrap.Width = LPSED.MainScroll.ActualWidth - 2;
+            }
+            else if (SubsWrap.ActualHeight <= 30 && MainWrap.Height != 20)
+            {
+                MainWrap.Height = 20;
+                MainWrap.Width = double.NaN;
+            }
+            else if (double.IsNaN(MainWrap.Height))
+            {
+                MainWrap.Width = LPSED.MainScroll.ActualWidth - 2;
+            }
+            BCRLFText.Margin = new Thickness(0, MainWrap.ActualHeight, 0, 0);
+            TCRLFText.Margin = new Thickness(5, MainWrap.ActualHeight + 2, 1, 2);
         }
     }
 }

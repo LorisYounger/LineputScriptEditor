@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.IO;
 using LinePutScript;
+using System.Threading;
+
 namespace LineputScriptEditor
 {
     /// <summary>
@@ -44,13 +46,22 @@ namespace LineputScriptEditor
             if (ColumTreeView.Width.Value == 0)
             {
                 ColumTreeView.Width = new GridLength(160);
-                ((Button)sender).Content = ">";
+                ((Button)sender).Content = "<";
             }
             else
             {
                 ColumTreeView.Width = new GridLength(0);
-                ((Button)sender).Content = "<";
+                ((Button)sender).Content = ">";
             }
+            new Thread(() =>
+            {
+                Thread.Sleep(10);
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    foreach (ISizeChange line in ListLPSText.Children)
+                        line.SizeChange();
+                }));
+            }).Start();
         }
 
         private LpsDocument toLPS()
@@ -117,6 +128,12 @@ namespace LineputScriptEditor
             else if (p > ListLPSText.Children.Count)
                 p = ListLPSText.Children.Count;
             ListLPSText.Children.Insert(p, insert);
+        }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            foreach (ISizeChange line in ListLPSText.Children)
+                line.SizeChange();
         }
     }
 }

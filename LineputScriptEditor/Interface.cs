@@ -101,6 +101,10 @@ namespace LineputScriptEditor
 
     public interface IEditorLines
     {
-        Line[] ToLines();
+        Line[] ToLines();       
+    }
+    public interface ISizeChange
+    {
+        void SizeChange();
     }
 }

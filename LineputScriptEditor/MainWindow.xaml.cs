@@ -1,21 +1,14 @@
-﻿using Microsoft.Win32;
+﻿using LinePutScript;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using LinePutScript;
-using System.IO;
-using System.Threading;
 namespace LineputScriptEditor
 {
     /// <summary>
@@ -23,15 +16,20 @@ namespace LineputScriptEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly string CurrentPath = Path.GetDirectoryName(typeof(MainWindow).Assembly.Location);
         public MainWindow()
         {
             InitializeComponent();
-            if (File.Exists(Environment.CurrentDirectory + @"\setting.lps"))
-                setting = new Setting(File.ReadAllText(Environment.CurrentDirectory + @"\setting.lps"));
+            if (File.Exists(CurrentPath + @"\setting.lps"))
+                setting = new Setting(File.ReadAllText(CurrentPath + @"\setting.lps"));
             else
                 setting = new Setting();
             setting.HistoryChange = RelsHistory;
             RelsHistory();
+            if(App.E.Args.Length > 0)
+            {
+                OpenFile(App.E.Args[0]);
+            }
         }
         public static Setting setting;
         public List<Editor> Editors = new List<Editor>();
@@ -196,7 +194,7 @@ namespace LineputScriptEditor
                     return;
                 }
             }
-            File.WriteAllText(Environment.CurrentDirectory + @"\setting.lps", setting.ToString());
+            File.WriteAllText(CurrentPath + @"\setting.lps", setting.ToString());
         }
 
         private void Run_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)

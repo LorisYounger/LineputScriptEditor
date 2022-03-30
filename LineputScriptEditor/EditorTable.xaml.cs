@@ -20,7 +20,7 @@ namespace LineputScriptEditor
     /// <summary>
     /// EditorTable.xaml 的交互逻辑
     /// </summary>
-    public partial class EditorTable : UserControl, IEditorLines
+    public partial class EditorTable : UserControl, IEditorLines, ISizeChange
     {
         private List<string> Names = new List<string>();
         public LPSEditor LPSED;
@@ -161,6 +161,11 @@ namespace LineputScriptEditor
         private void dataTable_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             LPSED.IsEdit = true;
+        }
+
+        public void SizeChange()
+        {
+            
         }
     }
 }

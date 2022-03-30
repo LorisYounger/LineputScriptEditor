@@ -13,10 +13,12 @@ namespace LineputScriptEditor
     /// </summary>
     public partial class App : Application
     {
+        public static StartupEventArgs E;
         protected override void OnStartup(StartupEventArgs e)
         {
             //e.Args为命令行参数
             //Do something
+            E = e;
         }
     }
 }

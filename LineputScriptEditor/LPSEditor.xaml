@@ -9,7 +9,7 @@
               d:DesignHeight="450"
               d:DesignWidth="800"
               FontSize="14">
-    <Grid PreviewKeyDown="Grid_PreviewKeyDown">
+    <Grid PreviewKeyDown="Grid_PreviewKeyDown" SizeChanged="Grid_SizeChanged">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="ColumTreeView"
                               Width="160px" />

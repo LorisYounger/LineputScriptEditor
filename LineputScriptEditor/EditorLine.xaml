@@ -1,83 +1,36 @@
-﻿<UserControl x:Class="LineputScriptEditor.EditorLine"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:LineputScriptEditor"
-             mc:Ignorable="d"
-             d:DesignWidth="800">
-    <Grid  Background="{DynamicResource LineBackground}"
-           Margin="1">
-        <WrapPanel Height="20"
-                   VerticalAlignment="Top">
-            <WrapPanel x:Name="SubsWrap">
+﻿<UserControl x:Class="LineputScriptEditor.EditorLine" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:LineputScriptEditor"
+        mc:Ignorable="d" d:DesignWidth="800">
+    <Grid Background="{DynamicResource LineBackground}" Margin="1">
+        <WrapPanel x:Name="MainWrap" Height="20" VerticalAlignment="Top">
+            <WrapPanel x:Name="SubsWrap" SizeChanged="SubsWrap_SizeChanged">
 
             </WrapPanel>
-            <Button x:Name="ButtonText"
-                    PreviewMouseLeftButtonDown="TText_MouseDown" />
-            <TextBlock x:Name="TText"
-                       HorizontalAlignment="Left"
-                       Margin="2,2,1,2"
-                       TextWrapping="Wrap"
-                       Text="Text"
-                       VerticalAlignment="Center"
-                       FontSize="14"
-                       PreviewMouseLeftButtonDown="TText_MouseDown"
-                       Foreground="{DynamicResource Text}" />
-            <TextBox x:Name="BText"
-                     TextWrapping="Wrap"
-                     Text="Text"
-                     PreviewLostKeyboardFocus="BText_LostKeyboardFocus"
-                     PreviewKeyDown="BText_KeyDown"
-                     Background="{x:Null}"
-                     Foreground="{DynamicResource Text}" />
-            <TextBlock x:Name="TEnd"
-                       HorizontalAlignment="Left"
-                       Margin="2,0,2,1"
-                       TextWrapping="Wrap"
-                       Text="///"
-                       VerticalAlignment="Center"
-                       FontSize="14"
-                       FontWeight="Bold"
-                       PreviewMouseLeftButtonDown="TComment_MouseDown"
-                       Foreground="{DynamicResource SymbolComment}" />
-            <TextBlock x:Name="TComment"
-                       HorizontalAlignment="Left"
-                       Margin="2,2,1,2"
-                       TextWrapping="Wrap"
-                       Text="Commont"
-                       VerticalAlignment="Center"
-                       FontSize="14"
-                       PreviewMouseLeftButtonDown="TComment_MouseDown"
-                       Foreground="{DynamicResource Comment}" />
-            <TextBox x:Name="BComment"
-                     TextWrapping="Wrap"
-                     Text="Commont"
-                     PreviewLostKeyboardFocus="BComment_LostKeyboardFocus"
-                     PreviewKeyDown="BComment_KeyDown"
-                     Margin="2,0,0,0"
-                     Foreground="{DynamicResource Comment}"
-                     Background="{x:Null}" />
+            <Button x:Name="ButtonText" PreviewMouseLeftButtonDown="TText_MouseDown" Height="20" />
+            <TextBlock x:Name="TText" HorizontalAlignment="Left" Margin="2,2,1,2" TextWrapping="Wrap" Text="Text"
+                    VerticalAlignment="Center" FontSize="14" PreviewMouseLeftButtonDown="TText_MouseDown"
+                    Foreground="{DynamicResource Text}" />
+            <TextBox x:Name="BText" TextWrapping="Wrap" Text="Text" PreviewLostKeyboardFocus="BText_LostKeyboardFocus"
+                    PreviewKeyDown="BText_KeyDown" Background="{x:Null}" Foreground="{DynamicResource Text}" Height="20" />
+            <TextBlock x:Name="TEnd" HorizontalAlignment="Left" Margin="2,0,2,1" TextWrapping="Wrap" Text="///"
+                    VerticalAlignment="Center" FontSize="14" FontWeight="Bold"
+                    PreviewMouseLeftButtonDown="TComment_MouseDown" Foreground="{DynamicResource SymbolComment}" />
+            <TextBlock x:Name="TComment" HorizontalAlignment="Left" Margin="2,2,1,2" TextWrapping="Wrap" Text="Commont"
+                    VerticalAlignment="Center" FontSize="14" PreviewMouseLeftButtonDown="TComment_MouseDown"
+                    Foreground="{DynamicResource Comment}" />
+            <TextBox x:Name="BComment" TextWrapping="Wrap" Text="Commont"
+                    PreviewLostKeyboardFocus="BComment_LostKeyboardFocus" PreviewKeyDown="BComment_KeyDown"
+                    Margin="2,0,0,0" Foreground="{DynamicResource Comment}" Background="{x:Null}" Height="20" />
 
         </WrapPanel>
-        <TextBox x:Name="BCRLFText"
-                 TextWrapping="Wrap"
-                 Text="Text"
-                 AcceptsReturn="True"
-                 AcceptsTab="True"
-                 PreviewLostKeyboardFocus="BCRLFText_PreviewLostKeyboardFocus"
-                 Background="{DynamicResource LineBackground}"
-                 Foreground="{DynamicResource Text}"
-                 Margin="0,20,0,0"
-                 VerticalAlignment="Top" />
-        <TextBlock x:Name="TCRLFText"
-                   HorizontalAlignment="Left"
-                   Margin="5,20,1,2"
-                   TextWrapping="Wrap"
-                   Text="Text"
-                   VerticalAlignment="Top"
-                   FontSize="12"
-                   PreviewMouseLeftButtonDown="TText_MouseDown"
-                   Foreground="{DynamicResource Text}" />
+        <TextBox x:Name="BCRLFText" TextWrapping="Wrap" Text="Text" AcceptsReturn="True" AcceptsTab="True"
+                PreviewLostKeyboardFocus="BCRLFText_PreviewLostKeyboardFocus"
+                Background="{DynamicResource LineBackground}" Foreground="{DynamicResource Text}" Margin="0,20,0,0"
+                VerticalAlignment="Bottom" />
+        <TextBlock x:Name="TCRLFText" HorizontalAlignment="Left" Margin="5,20,1,2" TextWrapping="Wrap" Text="Text"
+                VerticalAlignment="Bottom" FontSize="12" PreviewMouseLeftButtonDown="TText_MouseDown"
+                Foreground="{DynamicResource Text}" />
     </Grid>
 </UserControl>

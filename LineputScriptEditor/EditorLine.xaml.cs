@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using LinePutScript;
+using TextToDocument;
 
 namespace LineputScriptEditor
 {
@@ -20,7 +21,7 @@ namespace LineputScriptEditor
             {
                 lin.AddSub(((EditorSub)SubsWrap.Children[i]).ESub);
             }
-            lin.Text = Text.Replace("\r","");
+            lin.Text = Text.Replace("\r", "");
             lin.Comments = Comment;
             return lin;
         }
@@ -86,8 +87,8 @@ namespace LineputScriptEditor
                 TCRLFText.Visibility = Visibility.Visible;
                 BCRLFText.Visibility = Visibility.Collapsed;
 
-                TCRLFText.Text = Text;
-                TCRLFText.Margin = new Thickness(5, MainWrap.ActualHeight + 2, 1, 2);
+                TCRLFText.Document = TtD.TextToDocument(Text);
+                TCRLFText.Margin = new Thickness(0, MainWrap.ActualHeight, 0, 0);
                 ButtonText.Visibility = Visibility.Collapsed;
             }
             else
@@ -302,6 +303,7 @@ namespace LineputScriptEditor
                 MainWrap.Width = LPSED.MainScroll.ActualWidth - 2;
             }
             BCRLFText.Margin = new Thickness(0, MainWrap.ActualHeight, 0, 0);
+            TCRLFText.Width = LPSED.MainScroll.ActualWidth - 2;
             TCRLFText.Margin = new Thickness(5, MainWrap.ActualHeight + 2, 1, 2);
         }
     }

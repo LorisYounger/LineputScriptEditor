@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using TextToDocument;
 namespace LineputScriptEditor
 {
     /// <summary>
@@ -26,7 +27,11 @@ namespace LineputScriptEditor
                 setting = new Setting();
             setting.HistoryChange = RelsHistory;
             RelsHistory();
-            if(App.E.Args.Length > 0)
+            TtD.DefaultFormart.H1.FontSize = 18;
+            TtD.DefaultFormart.H2.FontSize = 16;
+            TtD.DefaultFormart.H3.FontSize = 14;
+            TtD.DefaultFormart.P.Foreground = (Brush)Application.Current.Resources.MergedDictionaries.Last()["Text"];
+            if (App.E.Args.Length > 0)
             {
                 OpenFile(App.E.Args[0]);
             }

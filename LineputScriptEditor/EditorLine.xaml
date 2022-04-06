@@ -29,8 +29,14 @@
                 PreviewLostKeyboardFocus="BCRLFText_PreviewLostKeyboardFocus"
                 Background="{DynamicResource LineBackground}" Foreground="{DynamicResource Text}" Margin="0,20,0,0"
                 VerticalAlignment="Bottom" />
-        <TextBlock x:Name="TCRLFText" HorizontalAlignment="Left" Margin="5,20,1,2" TextWrapping="Wrap" Text="Text"
-                VerticalAlignment="Bottom" FontSize="12" PreviewMouseLeftButtonDown="TText_MouseDown"
-                Foreground="{DynamicResource Text}" />
+        <RichTextBox x:Name="TCRLFText" HorizontalAlignment="Left" Margin="0,20,0,0" VerticalAlignment="Bottom"
+                FontSize="12" PreviewMouseLeftButtonDown="TText_MouseDown" BorderThickness="0" IsReadOnly="True"
+                Foreground="{DynamicResource Text}" Background="{x:Null}">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0,4,0,4" />
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
     </Grid>
 </UserControl>
